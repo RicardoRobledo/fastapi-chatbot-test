@@ -1,9 +1,17 @@
-from fastapi import FastAPI
-from starlette.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from decouple import config
+from openai import OpenAI
 
 app = FastAPI()
 
+
+app.mount("/css", StaticFiles(directory="frontend/css"), name="css")
+
+templates = Jinja2Templates(directory="frontend/templates")
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,5 +22,27 @@ app.add_middleware(
 )
 
 @app.get("/")
-def read_root():
-    return FileResponse("index.html")
+def read_root(request: Request):
+    return templates.TemplateResponse('index.html', context={'request':request})
+
+@app.post("/api")
+async def read_root2(request: Request):
+
+    json = await request.json()
+
+    client = OpenAI(
+        api_key=config('API_KEY'),
+    )
+    
+    chat_completion = client.chat.completions.create(
+        model="gpt-3.5-turbo-1106",
+        response_format={ "type": "json_object" },
+        messages=[
+            {"role": "system", "content": "eres un experto en ia que contesta preguntas solo de temas relacionados a ella"},
+            {"role": "user", "content": f"{json['msg']} Responde con un json y que el valor tenga todo el texto"}
+        ]
+    )
+    
+    msg = chat_completion.choices[0].message.content
+
+    return JSONResponse(content={'msg':msg})

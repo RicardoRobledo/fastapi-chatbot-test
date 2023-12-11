@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/chatbot.css">
+    <title>ChatBot NW</title>
+</head>
+
+<body>
+
+    <section class="chat">
+
+        <div>
+            <ul name="msgs">
+                <li>chatbot: Hola preguntame lo que necesites saber de ia</li>
+            </ul>
+
+            <form>
+                <input type="entry" name="caja">
+                <input type="submit">
+            </form>
+            
+        </div>
+
+    </section>
+
+</body>
+
+<script>
+    const form = document.querySelector('form');
+    
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const dato = document.getElementsByName("caja")[0].value;
+
+        const ul = document.getElementsByName('msgs')[0];
+        
+        const nuevoLi = document.createElement('li');
+        nuevoLi.textContent = `usuario: ${dato}`;
+        nuevoLi.style='background-color: rgb(198, 212, 188)'
+
+        ul.appendChild(nuevoLi);
+
+
+        const response = await fetch('http://127.0.0.1:8000/api', {
+            method: "POST",
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify({msg:dato}),
+        }).then((result)=>{
+            const json = result.json();
+            return json;
+        }).then((data)=>{
+            const nuevoLi2 = document.createElement('li');
+            const json = JSON.parse(data['msg']);
+            const valor = Object.values(json)[0];
+            console.log(valor);
+            nuevoLi2.textContent = `chatbot: ${valor}`;
+            nuevoLi2.style='background-color: rgb(68, 190, 123);'
+            nuevoLi.appendChild(nuevoLi2);
+        });
+
+    });
+</script>
+</html>
