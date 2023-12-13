@@ -1,4 +1,4 @@
-body {
+/*body {
     all: unset;
 }
 
@@ -28,4 +28,50 @@ section ul li{
 .chat{
     border-radius: 10%;
     background-color: rgb(72, 97, 236);
+}*/
+
+/* Reset de estilos para eliminar márgenes y rellenos por defecto */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos para el contenedor principal del chatbot */
+.chat {
+    max-width: 400px; /* Ajusta el ancho máximo según tus preferencias */
+    margin: 0 auto; /* Centra el chatbot en la página */
+    background-color: #b88efc; /* Color de fondo del chatbot */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 20px; /* Espaciado interno */
+}
+
+.chat div ul li{
+    list-style: none;
+    background-color: rgb(68, 190, 123);
+}
+
+/* Estilos para el ícono de carga */
+.loading-icon {
+    width: 20px;
+    height: 20px;
+    border: 4px solid rgba(0, 0, 0, 0.2);
+    border-top: 4px solid #1d4ed8;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Estilos para el logotipo */
+.logo {
+    max-width: 100%;
+    max-height: 100px;
+    /* Agrega otros estilos de logotipo según tus necesidades */
+}
+
+/* Estilos para hacer el chatbot responsivo */
+@media screen and (max-width: 600px) {
+    .chat {
+        max-width: 100%; /* Ocupa el ancho completo en dispositivos pequeños */
+    }
 }
