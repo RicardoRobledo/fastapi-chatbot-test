@@ -36,7 +36,7 @@ def startup():
     
     from transformers import pipeline
 
-    pipe = pipeline("text-generation", model="harborwater/open-llama-3b-v2-wizard-evol-instuct-v2-196k")
+    pipe = pipeline("text-generation", model="lmsys/vicuna-7b-v1.5")
 
 
 @app.get("/answer")
