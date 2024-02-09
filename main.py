@@ -25,6 +25,20 @@ app.add_middleware(
 def read_root(request: Request):
     return templates.TemplateResponse('index.html', context={'request':request})
 
+pipe = None
+
+@app.on_event('startup')
+def startup():
+
+    from huggingface_hub import login
+
+    login(config('HUGGING'))
+    
+    from transformers import pipeline
+
+    pipe = pipeline("text-generation", model="meta-llama/Llama-2-7b-chat-hf")
+
+
 @app.post("/api")
 async def read_root2(request: Request):
 
