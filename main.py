@@ -36,7 +36,7 @@ def startup():
     
     from transformers import pipeline
 
-    pipe = pipeline("audio-classification", model="facebook/mms-lid-126")
+    pipe = pipeline("text-classification", model="ProsusAI/finbert")
 
 
 @app.get("/answer")
