@@ -36,7 +36,7 @@ def startup():
     
     from transformers import pipeline
 
-    pipe = pipeline("text-generation", model="TinyLlama/TinyLlama-1.1B-Chat-v1.0")
+    pipe = pipeline("audio-classification", model="facebook/mms-lid-126")
 
 
 @app.get("/answer")
