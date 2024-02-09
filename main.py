@@ -36,7 +36,12 @@ def startup():
     
     from transformers import pipeline
 
-    pipe = pipeline("text-generation", model="meta-llama/Llama-2-7b-chat-hf")
+    pipe = pipeline("text-generation", model="harborwater/open-llama-3b-v2-wizard-evol-instuct-v2-196k")
+
+
+@app.get("/answer")
+def read_root(request: Request):
+    return pipe('Hola llama 2')
 
 
 @app.post("/api")
