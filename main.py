@@ -36,7 +36,7 @@ def startup():
     
     from transformers import pipeline
 
-    pipe = pipeline("text-generation", model="lmsys/vicuna-7b-v1.5")
+    pipe = pipeline("text-generation", model="TinyLlama/TinyLlama-1.1B-Chat-v1.0")
 
 
 @app.get("/answer")
