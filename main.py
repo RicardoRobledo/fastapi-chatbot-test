@@ -3,6 +3,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse
 from decouple import config
 from openai import OpenAI
 
@@ -21,10 +22,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root(request: Request):
-    return templates.TemplateResponse('index.html', context={'request':request})
-
 pipe = None
 
 @app.on_event('startup')
@@ -35,21 +32,52 @@ def startup():
     login(config('HUGGING'))
     
     from transformers import pipeline
+    pipe = pipeline('fill-mask', model='bert-base-uncased')
 
-    pipe = pipeline("text-classification", model="ProsusAI/finbert")
 
+@app.get("/")
+def read_root(request: Request):
+    return templates.TemplateResponse('index.html', context={'request':request})
 
 @app.get("/answer")
 def read_root(request: Request):
-    return pipe('Hola llama 2')
+    return pipe("Hello I'm a [MASK] model.")
 
+@app.get("/js")
+def read_root(request: Request):
+    return FileResponse('frontend/js/index.js')
+
+@app.get("/css")
+def read_root(request: Request):
+    return FileResponse('frontend/css/chatbot.css')
 
 @app.post("/api")
 async def read_root2(request: Request):
 
     json = await request.json()
 
-    client = OpenAI(
+    '''from pathlib import Path
+    
+    speech_file_path = Path(__file__).parent / "speech.mp3"
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input="Piensa en mi de vez en cuando"
+    )
+    response.stream_to_file(speech_file_path)'''
+
+    response = API(
+        url="https://papinnovacin.com/", # Your store URL
+        consumer_key=config('USERNAME_WOOCOMERCE'), # Your consumer key
+        consumer_secret=config('PASSWORD_WOOCOMERCE'), # Your consumer secret
+        version="wc/v3" # WooCommerce WP REST API version
+    ).get('products')
+
+
+    if response.status_code==200:
+        print(response.json())
+
+    '''client = OpenAI(
         api_key=config('API_KEY'),
     )
     
@@ -62,6 +90,6 @@ async def read_root2(request: Request):
         ]
     )
     
-    msg = chat_completion.choices[0].message.content
+    msg = chat_completion.choices[0].message.content'''
 
-    return JSONResponse(content={'msg':msg})
+    return JSONResponse(content={'msg':5})
