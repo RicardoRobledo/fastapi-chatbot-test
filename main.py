@@ -24,15 +24,11 @@ app.add_middleware(
 
 @app.get("/webhook")
 def obtain(request: Request):
-    print(request)
+    return request
 
 @app.get("/")
 def read_root(request: Request):
     return templates.TemplateResponse('index.html', context={'request':request})
-
-@app.get("/answer")
-def read_root(request: Request):
-    return pipe("Hello I'm a [MASK] model.")
 
 @app.get("/js")
 def read_root(request: Request):
