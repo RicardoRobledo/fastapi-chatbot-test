@@ -22,11 +22,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event('startup')
-def startup():
-
-    pass
-
+@app.get("/webhook")
+def obtain(request: Request):
+    print(request)
 
 @app.get("/")
 def read_root(request: Request):
