@@ -22,17 +22,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-pipe = None
-
 @app.on_event('startup')
 def startup():
 
-    from huggingface_hub import login
-
-    login(config('HUGGING'))
-    
-    from transformers import pipeline
-    pipe = pipeline('fill-mask', model='bert-base-uncased')
+    pass
 
 
 @app.get("/")
