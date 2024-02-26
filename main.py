@@ -24,7 +24,8 @@ app.add_middleware(
 
 @app.get("/webhook")
 def obtain(request: Request):
-    return request
+    print(request.json())
+    return {"message": "Hello World"}
 
 @app.get("/")
 def read_root(request: Request):
