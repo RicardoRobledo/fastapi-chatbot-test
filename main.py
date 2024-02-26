@@ -27,6 +27,11 @@ def obtain(request: Request):
     print(request.json())
     return {"message": "Hello World"}
 
+@app.post("/webhook")
+def obtain(request: Request):
+    print(request.json())
+    return {"message": "OK"}
+
 @app.get("/")
 def read_root(request: Request):
     return templates.TemplateResponse('index.html', context={'request':request})
