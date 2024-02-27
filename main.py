@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 @app.get("/webhook")
-def obtain(request: Request):
+async def whatsapp_webhook(request: Request):
     print(request.json())
     return {"message": "Hello World"}
 
