@@ -51,8 +51,50 @@ async def verify_webhook(request: Request):
             return Response(status_code=403)
 
 @app.post("/webhook")
-async def obtain(request: Request):
-    return {"message": "OK"}
+async def whatsapp_webhook(request: Request):
+    # Parse the request body from the POST
+    body = await request.json()
+
+    # Check the Incoming webhook message
+    print(json.dumps(body, indent=2))
+
+    # Verify if the request is from WhatsApp API
+    if body.get("object") == "page":
+        if (
+            body.get("entry") and
+            body["entry"][0].get("changes") and
+            body["entry"][0]["changes"][0].get("value") and
+            body["entry"][0]["changes"][0]["value"].get("messages")
+        ):
+            phone_number_id = body["entry"][0]["changes"][0]["value"]["metadata"]["phone_number_id"]
+            from_phone_number = body["entry"][0]["changes"][0]["value"]["messages"][0]["from"]
+            msg_body = body["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+
+            # Your access token
+            access_token = "YOUR_ACCESS_TOKEN"
+
+            # Construct the URL for sending the response
+            url = f"https://graph.facebook.com/v12.0/{phone_number_id}/messages?access_token={access_token}"
+
+            # Data to be sent in the response
+            data = {
+                "messaging_product": "whatsapp",
+                "to": from_phone_number,
+                "text": {"body": "Ack: " + msg_body}
+            }
+
+            # Send the response using requests library
+            response = requests.post(url, json=data)
+
+            # Check if the response is successful
+            if response.status_code == 200:
+                return JSONResponse(content={"message": "Response sent successfully"}, status_code=200)
+            else:
+                raise HTTPException(status_code=response.status_code, detail="Error sending response")
+        else:
+            raise HTTPException(status_code=400, detail="Invalid webhook payload")
+    else:
+        raise HTTPException(status_code=404, detail="Event is not from WhatsApp API")
 
 @app.get("/")
 def read_root(request: Request):
