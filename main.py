@@ -23,8 +23,28 @@ app.add_middleware(
 )
 
 @app.get("/webhook")
-async def whatsapp_webhook(request: Request):
-    return "972496802"
+async def verify_webhook(request: Request, hub_mode: str = Query(None), hub_verify_token: str = Query(None), hub_challenge: str = Query(None)):
+    """
+    Update your verify token.
+    This will be the Verify Token value when you set up webhook.
+    """
+    verify_token = "golf1"  # Update with your actual verify token
+
+    # Parse params from the webhook verification request
+    mode = hub_mode
+    token = hub_verify_token
+    challenge = hub_challenge
+
+    # Check if a token and mode were sent
+    if mode and token:
+        # Check the mode and token sent are correct
+        if mode == "subscribe" and token == verify_token:
+            # Respond with 200 OK and challenge token from the request
+            print("WEBHOOK_VERIFIED")
+            return Response(content=challenge, status_code=200)
+        else:
+            # Responds with '403 Forbidden' if verify tokens do not match
+            return Response(status_code=403)
 
 @app.post("/webhook")
 async def obtain(request: Request):
