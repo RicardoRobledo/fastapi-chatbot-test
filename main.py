@@ -22,13 +22,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/webhook")
+@app.webhook.get("/webhook")
 async def whatsapp_webhook(request: Request):
-    print(request.json())
-    return {"message": "Hello World"}
+    return {"message": "Hello"}
 
-@app.post("/webhook")
-def obtain(request: Request):
+@app.webhook.post("/webhook")
+async def obtain(request: Request):
     return {"message": "OK"}
 
 @app.get("/")
