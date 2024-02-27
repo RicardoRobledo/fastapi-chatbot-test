@@ -29,7 +29,6 @@ async def whatsapp_webhook(request: Request):
 
 @app.post("/webhook")
 def obtain(request: Request):
-    print(request.json())
     return {"message": "OK"}
 
 @app.get("/")
