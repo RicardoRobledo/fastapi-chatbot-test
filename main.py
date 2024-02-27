@@ -7,6 +7,10 @@ from fastapi.responses import FileResponse
 from decouple import config
 from openai import OpenAI
 
+from fastapi import FastAPI, Query
+from starlette.requests import Request
+from starlette.responses import Response
+
 app = FastAPI()
 
 
